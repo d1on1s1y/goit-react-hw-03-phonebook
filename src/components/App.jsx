@@ -1,8 +1,9 @@
 import { Component } from 'react';
 import { ContactsForm } from './Contacts/Contacts';
 import { Filter } from './Filter/Filter';
-import Form from './Form/Form';
+import Form from './Form';
 import s from './App.module.css';
+import { nanoid } from 'nanoid';
 
 // export const App = () => {
 export class App extends Component {
@@ -16,17 +17,29 @@ export class App extends Component {
     filter: '',
   };
 
-  handleSubmit = object => {
-    const { contacts } = this.state;
-    this.setState({ contacts: [...contacts, object] });
+  componentDidMount() {
+    const getStorageContacts = localStorage.getItem('contacts');
 
-    const checkContact = contacts.find(
-      contact => contact.name.toLowerCase() === object.name.toLowerCase()
-    );
-    console.log(checkContact);
-    if (checkContact) {
-      alert(`${object.name} is already in contacts `);
+    if (getStorageContacts !== null) {
+      this.setState({
+        contacts: JSON.parse(getStorageContacts),
+      });
     }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
+  handleSubmit = ({ name, number }) => {
+    const contact = { id: nanoid(), name, number };
+    if (this.state.contacts.some(e => e.name === name)) {
+      return alert(`${name} is already in contacts!`);
+    }
+
+    this.setState(({ contacts }) => ({ contacts: [contact, ...contacts] }));
   };
 
   handleDelete = id => {
