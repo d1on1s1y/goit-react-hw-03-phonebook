@@ -24,6 +24,7 @@ class Form extends Component {
     const obj = { name: name, tel: tel, id: nanoid(3) };
     console.log('form');
     changeAppState(obj);
+    e.target.reset();
   };
 
   render() {
