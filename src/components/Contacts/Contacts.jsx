@@ -1,7 +1,8 @@
 import React from 'react';
 import s from './Contacts.module.css';
+import PropTypes from 'prop-types';
 
-export const ContactsForm = ({ contacts, onDelete }) => {
+function ContactsForm({ contacts, onDelete })  {
   return (
     <>
       {' '}
@@ -26,3 +27,9 @@ export const ContactsForm = ({ contacts, onDelete }) => {
     </>
   );
 };
+ContactsForm.propTypes = {
+  contacts: PropTypes.array,
+  onDelete: PropTypes.func
+}
+
+export default ContactsForm;
